@@ -47,7 +47,7 @@ public class Song {
 		System.out.println("     discNo: " + discNo);
 		System.out.println("       year: " + year);
 		System.out.println("    comment: " + comment);
-		System.out.println("----------------------------------------------\n");
+		System.out.println("----------------------------------------------");
 	}
 
 	public int getId() {

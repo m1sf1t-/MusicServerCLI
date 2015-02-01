@@ -20,7 +20,7 @@ public class DBManager {
 	private static final String createSongsSQL = 
 			"CREATE TABLE songs (" +
 			"id INT PRIMARY KEY, " +
-			"path VARCHAR(32672) NOT NULL, " +
+			"path VARCHAR(32672) NOT NULL UNIQUE, " +
 			"artist VARCHAR(32672), " +
 			"album VARCHAR(32672), " +
 			"title VARCHAR(32672), " +
@@ -38,7 +38,7 @@ public class DBManager {
 			"songId INT NOT NULL, " +
 			"songPath VARCHAR(32672) NOT NULL," +
 			"filePath VARCHAR(32672) NOT NULL, " +
-			"action VARCHAR(1) NOT NULL, " +
+			"action VARCHAR(2) NOT NULL, " +
 			"jsonData VARCHAR(32672) NOT NULL)";
 	
 	private SongDAO sdao = null;
@@ -117,7 +117,7 @@ public class DBManager {
 		}
 	}
 	
-    static int processStatement(String sql) throws SQLException{
+    public static int processStatement(String sql) throws SQLException{
     	
     	System.out.println("SQL statement: \n'" + sql + "' executing...");
     	

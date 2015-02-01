@@ -49,7 +49,7 @@ public class JsonFileDAO {
 			rs.close();
 			stmt.close();
 		}catch(SQLException se){
-			printSQLException(se);
+			se.printStackTrace();
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class JsonFileDAO {
 				jsonFile = new JsonFile(targetId, songId, songPath, filePath, action, jsonData);
 			}
 		}catch(SQLException se){
-			printSQLException(se);
+			se.printStackTrace();
 		}
 		
 		return jsonFile;
@@ -100,10 +100,10 @@ public class JsonFileDAO {
     	int jsonFileId = jsonFile.getId();
     	stmt.setInt(1, jsonFileId);
     	stmt.setInt(2, jsonFile.getSongId());
-    	stmt.setString(3, fixApostrophes(jsonFile.getSongPath()));
-    	stmt.setString(4, fixApostrophes(jsonFile.getFilePath()));
-    	stmt.setString(5, fixApostrophes(jsonFile.getAction()));
-    	stmt.setString(6, fixApostrophes(jsonFile.getJsonData()));
+    	stmt.setString(3, escapeApos(jsonFile.getSongPath()));
+    	stmt.setString(4, escapeApos(jsonFile.getFilePath()));
+    	stmt.setString(5, escapeApos(jsonFile.getAction()));
+    	stmt.setString(6, escapeApos(jsonFile.getJsonData()));
     	
     	numRows += stmt.executeUpdate();
     	
@@ -113,7 +113,7 @@ public class JsonFileDAO {
 			"VALUES (?, ?, ?, ?, ?, ?)";
     	 */
     	
-    	System.out.println("\n" + numRows + " row/s inserted into jsonFiles table.\n");
+    	System.out.println("Entry added to jsonFiles table.\n");
     	
     	// ALWAYS REMEMBER TO CLOSE
     	stmt.close();
@@ -134,8 +134,8 @@ public class JsonFileDAO {
     	// This is a reference to a variable that is to be inserted-------------^
     	
     	stmt.setInt(1, jsonFile.getSongId());
-    	stmt.setString(2, jsonFile.getSongPath());
-    	stmt.setString(3, jsonFile.getFilePath());
+    	stmt.setString(2, escapeApos(jsonFile.getSongPath()));
+    	stmt.setString(3, escapeApos(jsonFile.getFilePath()));
     	stmt.setString(4, jsonFile.getAction());
     	stmt.setString(5, jsonFile.getJsonData());
     	
@@ -147,18 +147,7 @@ public class JsonFileDAO {
     	stmt.close();
     }
     
-    static void printSQLException(SQLException se) {
-        while(se != null) {
-
-            System.out.print("SQLException: State:   " + se.getSQLState());
-            System.out.println("Severity: " + se.getErrorCode());
-            System.out.println(se.getMessage());   
-            
-            se = se.getNextException();
-        }
-    }
-    
-    public String fixApostrophes(String string){
+    public String escapeApos(String string){
     	return string.replace("'", "''");
     }
 }

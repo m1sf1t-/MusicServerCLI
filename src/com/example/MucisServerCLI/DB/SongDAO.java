@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.example.MusicServerCLI.LibraryManager;
+
 public class SongDAO {
 
 	Connection con = null;
@@ -17,6 +19,11 @@ public class SongDAO {
 			"SELECT path, artist, album, title, albumArtist, " +
 			       "composer, genre, trackNo, discNo, songYear, comment " +
 			"FROM songs WHERE id = ?";
+	
+	private static final String selectSongByPathSQL = 
+			"SELECT id, artist, album, title, albumArtist, " +
+			       "composer, genre, trackNo, discNo, songYear, comment " +
+			"FROM songs WHERE path = ?";
 	
 	private static final String insertSongSQL = 
 			"INSERT INTO songs " +
@@ -30,6 +37,9 @@ public class SongDAO {
 			"title = ?, albumArtist = ?, composer = ?, " +
 			"genre = ?, trackNo = ?, discNo = ?, songYear = ?, comment = ? " +
 			"WHERE id = ?";
+	
+	private static final String deleteSongSQL = 
+			"DELETE FROM songs WHERE path = ?";
 	
 	public SongDAO(Connection con){
 		this.con = con;
@@ -52,7 +62,7 @@ public class SongDAO {
 			rs.close();
 			stmt.close();
 		}catch(SQLException se){
-			printSQLException(se);
+			se.printStackTrace();
 		}
 	}
 	
@@ -89,11 +99,45 @@ public class SongDAO {
 				
 			}
 		}catch(SQLException se){
-			printSQLException(se);
+			se.printStackTrace();
 		}
 		
 		return song;
 	}
+	
+    public Song getSongFromPath(String path){
+		Song song = null;
+		
+		try{
+			pstmt = con.prepareStatement(selectSongByPathSQL);
+			pstmt.clearParameters();
+			pstmt.setString(1, path);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()){
+				int id = rs.getInt("id");
+				String artist = rs.getString("artist");
+				String album = rs.getString("album");
+				String title = rs.getString("title");
+				String albumArtist = rs.getString("albumArtist");
+				String composer = rs.getString("composer");
+				String genre = rs.getString("genre");
+				String trackNo  = rs.getString("trackNo");
+				String discNo = rs.getString("discNo");
+				String year = rs.getString("songYear");
+				String comment = rs.getString("comment");
+				
+				song = new Song(id, path, artist, album, title, albumArtist, 
+						composer, genre, trackNo, discNo, year, comment);
+				
+			}
+		}catch(SQLException se){
+			se.printStackTrace();
+		}
+		
+		return song;
+    }
 	
     public void insertSong(Song song) throws SQLException{
     	
@@ -110,22 +154,22 @@ public class SongDAO {
     	// This is a reference to a variable that is to be inserted-------------^
     	
     	stmt.setInt(1, getMaxId());
-    	stmt.setString(2, song.getPath());
-    	stmt.setString(3, song.getArtist());
-    	stmt.setString(4, song.getAlbum());
-    	stmt.setString(5, song.getTitle());
-    	stmt.setString(6, song.getAlbumArtist());
-    	stmt.setString(7, song.getComposer());
-    	stmt.setString(8, song.getGenre());
-    	stmt.setString(9, song.getTrackNo());
-    	stmt.setString(10, song.getDiscNo());
-    	stmt.setString(11, song.getYear());
-    	stmt.setString(12, song.getComment());
+    	stmt.setString(2, escapeApos(song.getPath()));
+    	stmt.setString(3, escapeApos(song.getArtist()));
+    	stmt.setString(4, escapeApos(song.getAlbum()));
+    	stmt.setString(5, escapeApos(song.getTitle()));
+    	stmt.setString(6, escapeApos(song.getAlbumArtist()));
+    	stmt.setString(7, escapeApos(song.getComposer()));
+    	stmt.setString(8, escapeApos(song.getGenre()));
+    	stmt.setString(9, escapeApos(song.getTrackNo()));
+    	stmt.setString(10, escapeApos(song.getDiscNo()));
+    	stmt.setString(11, escapeApos(song.getYear()));
+    	stmt.setString(12, escapeApos(song.getComment()));
     	
     	numRows += stmt.executeUpdate();
     	
     	
-    	System.out.println("\n" + numRows + " row/s inserted into songs table.\n");
+    	System.out.println("Entry added to songs table.\n");
     	
     	// ALWAYS REMEMBER TO CLOSE
     	stmt.close();
@@ -145,17 +189,17 @@ public class SongDAO {
     	// This number represents which "?" is in the PreparedStatement --^     |
     	// This is a reference to a variable that is to be inserted-------------^
     	
-    	stmt.setString(1, song.getPath());
-    	stmt.setString(2, song.getArtist());
-    	stmt.setString(3, song.getAlbum());
-    	stmt.setString(4, song.getTitle());
-    	stmt.setString(5, song.getAlbumArtist());
-    	stmt.setString(6, song.getComposer());
-    	stmt.setString(7, song.getGenre());
-    	stmt.setString(8, song.getTrackNo());
-    	stmt.setString(9, song.getDiscNo());
-    	stmt.setString(10, song.getYear());
-    	stmt.setString(11, song.getComment());
+    	stmt.setString(1, escapeApos(song.getPath()));
+    	stmt.setString(2, escapeApos(song.getArtist()));
+    	stmt.setString(3, escapeApos(song.getAlbum()));
+    	stmt.setString(4, escapeApos(song.getTitle()));
+    	stmt.setString(5, escapeApos(song.getAlbumArtist()));
+    	stmt.setString(6, escapeApos(song.getComposer()));
+    	stmt.setString(7, escapeApos(song.getGenre()));
+    	stmt.setString(8, escapeApos(song.getTrackNo()));
+    	stmt.setString(9, escapeApos(song.getDiscNo()));
+    	stmt.setString(10, escapeApos(song.getYear()));
+    	stmt.setString(11, escapeApos(song.getComment()));
     	
     	stmt.setInt(12, song.getId());
     	
@@ -168,6 +212,15 @@ public class SongDAO {
     	stmt.close();
     }
     
+    public void deleteSong(String filePath) throws SQLException{
+    	int numRows = 0;
+    	PreparedStatement stmt = con.prepareStatement(deleteSongSQL);
+    	stmt.setString(1, escapeApos(filePath));
+    	numRows += stmt.executeUpdate();
+    	System.out.println("\n" + numRows + " row/s deleted from songs table.\n");
+    	stmt.close();
+    }
+    
     public boolean checkSongExistsByPath(String path){
     	boolean exists = false;
 		try{
@@ -175,7 +228,7 @@ public class SongDAO {
 			Statement stmt = con.createStatement();
 			
 			ResultSet rs = 
-					stmt.executeQuery("SELECT id FROM songs WHERE path = '" + path + "'");
+					stmt.executeQuery("SELECT id FROM songs WHERE path = '" + escapeApos(path) + "'");
 			
 			if(rs.next()){
 				exists = true;
@@ -184,20 +237,14 @@ public class SongDAO {
 			rs.close();
 			stmt.close();
 		}catch(SQLException se){
-			printSQLException(se);
+			se.printStackTrace();
 		}
 		
 		return exists;
     }
     
-    static void printSQLException(SQLException se) {
-        while(se != null) {
-
-            System.out.print("SQLException: State:   " + se.getSQLState());
-            System.out.println("Severity: " + se.getErrorCode());
-            System.out.println(se.getMessage());            
-            
-            se = se.getNextException();
-        }
+    private String escapeApos(String string){
+    	return string.replace("'", "''");
     }
+
 }

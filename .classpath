@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jaudiotagger-2.2.2.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/commons-io-2.4/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-alpn-client-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-alpn-server-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-annotations-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-cdi-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-client-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-continuation-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-deploy-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-http-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-io-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-jaas-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-jaspi-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-jmx-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-jndi-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-plus-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-proxy-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-quickstart-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-rewrite-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-schemas-3.1.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-security-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-server-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-servlet-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-servlets-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-util-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-webapp-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/jetty-xml-9.2.6.v20141205.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jetty-distribution-9.2.6.v20141205/lib/servlet-api-3.1.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/jpathwatch-0-95/jpathwatch-0-95.jar"/>
+	<classpathentry kind="lib" path="/media/share/Kyle/programs/java/libraries/db-derby-10.10.1.1-bin/lib/derby.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

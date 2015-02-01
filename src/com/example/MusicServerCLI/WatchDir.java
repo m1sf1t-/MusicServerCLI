@@ -51,6 +51,7 @@ public class WatchDir {
     private boolean trace = false;
     private String musicFolder = null;
     LibraryManager libraryManager = null;
+    private boolean publicServer = false;
 
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
@@ -95,15 +96,15 @@ public class WatchDir {
     /**
      * Creates a WatchService and registers the given directory
      */
-    WatchDir(Path dir, boolean recursive) throws IOException {
+    WatchDir(Path dir, boolean recursive, boolean publicServer) throws IOException {
         this.watcher = FileSystems.getDefault().newWatchService();
         this.keys = new HashMap<WatchKey,Path>();
         this.recursive = recursive;
+        this.publicServer = publicServer;
 
         if (recursive) {
-            System.out.format("Scanning %s ...\n", dir);
+            System.out.format("\nWatching folders under %s ...\n", dir);
             registerAll(dir);
-            System.out.println("Done.");
         } else {
             register(dir);
         }
@@ -111,7 +112,7 @@ public class WatchDir {
         // enable trace after initial registration
         this.trace = true;
         
-        libraryManager = new LibraryManager(dir.toString());
+        libraryManager = new LibraryManager(dir.toString(), publicServer);
     }
 
     /**
@@ -134,6 +135,15 @@ public class WatchDir {
                 continue;
             }
 
+        	// sleep 250 milliseconds
+            // give the file a chance to even "touch"
+        	try {
+				Thread.sleep(250);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            
             for (WatchEvent<?> event: key.pollEvents()) {
                 WatchEvent.Kind kind = event.kind();
 
@@ -155,10 +165,6 @@ public class WatchDir {
                     if(Files.isDirectory(child)){
                         try {
                         	
-                        	// sleep 1 second to allow for 
-                        	// folder to finish being created
-                        //	Thread.sleep(1000);
-                        	
 							Files.walkFileTree(child, new SimpleFileVisitor<Path>() {
 							    @Override
 							    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
@@ -174,42 +180,60 @@ public class WatchDir {
 							        return FileVisitResult.CONTINUE;
 							    }
 							});
-						} catch (IOException e) {
+						}catch(IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
                     }else{
                     	libraryManager.addSongFromPath(child.toString());
                     }
+                }else if(kind == ENTRY_MODIFY){
+                	
+                	 if(Files.isDirectory(child)){
+                         try {
+                         	
+ 							Files.walkFileTree(child, new SimpleFileVisitor<Path>() {
+ 							    @Override
+ 							    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+ 							        throws IOException {
+ 							    	
+ 							        // call addSongFromPath for each file in directory
+ 							    	File[] files = new File(dir.toString()).listFiles();
+ 							    	
+ 							    	for(int i = 0; i < files.length; i++){
+ 							    		libraryManager.modifySongFromPath(files[i].getPath());
+ 							    	}
+ 							    	
+ 							        return FileVisitResult.CONTINUE;
+ 							    }
+ 							});
+ 						}catch(IOException e) {
+ 							// TODO Auto-generated catch block
+ 							e.printStackTrace();
+ 						}
+                     }else{
+                     	libraryManager.modifySongFromPath(child.toString());
+                     }
+                	
                 }else if(kind == ENTRY_DELETE){
-                    if(Files.isDirectory(child)){
-                        try {
-                        	
-                        	// sleep 1 second to allow for 
-                        	// folder to finish being created
-                        //	Thread.sleep(1000);
-                        	
-							Files.walkFileTree(child, new SimpleFileVisitor<Path>() {
-							    @Override
-							    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-							        throws IOException {
-							    	
-							        // call addSongFromPath for each file in directory
-							    	File[] files = new File(dir.toString()).listFiles();
-							    	
-							    	for(int i = 0; i < files.length; i++){
-							    		libraryManager.deleteSongFromPath();
-							    	}
-							    	
-							        return FileVisitResult.CONTINUE;
-							    }
-							});
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+                	
+                	// need to delete everything in database LIKE the folder that was deleted
+                	// can't iterate file path because it's been deleted
+                	
+                	// if a single file, can delete from db as is
+                	
+                	// Files.isDirectory() is always false because the file can never be a directory
+                	// ... it's been deleted
+                	
+                	// YOU HAVE CHANGED GETPUBLICHOSTNAME TO GETLOCALHOSTNAME
+                	// MAKE THIS WORK BOTH WAYS
+                	
+                	String path = child.toString();
+                	
+                    if(isDirectoryString(child.toString())){
+                    	libraryManager.deleteSongsLikePath(child.toString());
                     }else{
-                    	libraryManager.deleteSongFromPath();
+			    		libraryManager.deleteSongFromPath(child.toString());
                     }
                 }
 
@@ -243,22 +267,19 @@ public class WatchDir {
         System.err.println("usage: java WatchDir [-r] dir");
         System.exit(-1);
     }
-
-    public static void main(String[] args) throws IOException {
-        // parse arguments
-        if (args.length == 0 || args.length > 2)
-            usage();
-        boolean recursive = false;
-        int dirArg = 0;
-        if (args[0].equals("-r")) {
-            if (args.length < 2)
-                usage();
-            recursive = true;
-            dirArg++;
-        }
-
-        // register directory and process its events
-        Path dir = Paths.get(args[dirArg]);
-        new WatchDir(dir, recursive).processEvents();
+    
+    public static boolean isDirectoryString(String dir){
+    	
+    	//String[] dirSplit = dir.split("\\.");
+    	
+    	String[] dirSplitNix = dir.split("\\/");
+    	String[] dirSplitNixDos = dirSplitNix[dirSplitNix.length - 1].split("\\\\");
+    	String last = dirSplitNixDos[dirSplitNixDos.length - 1];
+    	
+    	if(last.split("\\.").length > 1){
+    		return false;
+    	}else{
+    		return true;
+    	}
     }
 }
