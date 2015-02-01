@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Sun Feb 01 10:04:19 GMT 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-014b-4499-18bf-00000474a518 
-on database directory /media/share/Kyle/programs/java/ServerSideMusicApp/MusicServerCLI/MusicLibrary with class loader sun.misc.Launcher$AppClassLoader@6208f57a 
+Sun Feb 01 13:28:19 GMT 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-014b-4553-ddce-0000046e63e8 
+on database directory /media/share/Kyle/programs/java/ServerSideMusicApp/MusicServerCLI/MusicLibrary with class loader sun.misc.Launcher$AppClassLoader@5f2e712f 
 Loaded from file:/media/share/Kyle/programs/java/libraries/db-derby-10.10.1.1-bin/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_65-b32

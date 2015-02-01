@@ -52,8 +52,8 @@ public class MusicServer {
 				
 				createMusicLibraryFolder(musicFolder);
 				
-				LibraryManager libManager = new LibraryManager(musicFolder, publicServer);
-				libManager.makeLibrary();
+				/*LibraryManager libManager = new LibraryManager(musicFolder, publicServer);
+				libManager.makeLibrary();*/
 
 				System.out.println("\nStarting server at " + musicFolder + "\n");
 				startServer(musicFolder, publicServer);

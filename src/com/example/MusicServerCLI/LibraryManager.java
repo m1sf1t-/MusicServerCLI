@@ -49,7 +49,9 @@ public class LibraryManager {
 		jdao = db.getJsonFileDAO();
 		this.publicServer = publicServer;
 		localHostname = getLocalHostname();
-		publicHostname = getPublicHostname();
+		if(publicServer){
+			publicHostname = getPublicHostname();
+		}
 	}
 	
 	public String getMusicFolder() {
@@ -78,12 +80,6 @@ public class LibraryManager {
 			if(metaData != null){	
 				// stick a "/" before the url because there isn't one :S
 				metaData[0] = "/" + metaData[0];
-				
-				// windows compatibility - doesn't work :\
-				/*metaData[0].replace("\\", "\\/");
-				metaData[0].replaceAll("\\\\", "\\/");
-				
-				System.out.println("WINDOWSCOMPAT: Replacing backslashes..." + metaData[0]);*/
 				
 				metaData[0] = pathToUrl(metaData[0]);
 					
@@ -397,6 +393,9 @@ public class LibraryManager {
 	public String pathToUrl(String path){
 		
 		String url = path.replace(musicFolder, "");
+		
+		// windows compat here
+		url = url.replace("\\", "/");
 		
 		url = url.replace(" ", "%20");
 		
